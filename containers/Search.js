@@ -10,6 +10,7 @@ import {
   FlatList,
   ActivityIndicator,
 } from "react-native";
+import { connect } from "react-redux";
 
 import FilmItem from "../components/FilmItem";
 import { getFilmsFromApiWithSearchedText } from "../API/TMDBApi";
@@ -45,6 +46,7 @@ class Search extends React.Component {
             films: [...this.state.films, ...data.results],
             isLoading: false,
           });
+          // console.log(this.state.films); OK
         }
       );
     }
@@ -99,8 +101,21 @@ class Search extends React.Component {
         <Button title="Rechercher" onPress={() => this._searchFilms()} />
         <FlatList
           data={this.state.films}
+          // rajoute une autre data pour prendre en compte les favoris ET la BDD movie, et surtout s'updater si l'une des data change, on aurait pu connecter le store redux favoris à FilmItem mais c'est pas optimisé ca appelle redux des milliers de fois à chaque FilmItem...
+          extraData={this.props.favoriteFilms}
           keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => <FilmItem film={item} />}
+          renderItem={({ item }) => (
+            <FilmItem
+              film={item}
+              isFavoriteFilm={
+                this.props.favoriteFilms.findIndex(
+                  (film) => film.id === item.id
+                ) !== -1
+                  ? true
+                  : false
+              }
+            />
+          )}
           // On va définir  onEndReachedThreshold  à  0.5   pour que l'évènement  onReachEnd  se déclenche quand il ne reste plus qu'une moitié de longueur de notre FlatList à afficher:
           onEndReachedThreshold={0.5}
           // http://api.themoviedb.org/3/search/movie?api_key=VOTRE_TOKEN_ICI&language=fr&query=Star render :
@@ -149,4 +164,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Search;
+const mapStateToProps = (state) => {
+  return {
+    favoriteFilms: state.favoriteFilms,
+  };
+};
+
+export default connect(mapStateToProps)(Search);
