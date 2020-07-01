@@ -23,6 +23,8 @@ function toggleFavorite(state = initialState, action) {
           ...state,
           favoriteFilms: [...state.favoriteFilms, action.value],
         };
+
+        // si la valeur à modifier est un objet par exempla une todo de todolist, on doit créer un nouvel objet pour le remplacer en utilisant la méthode "return Object.assign({}, todo, {completed : !todo.completed} )" ou plus simplement sans pollyfill : "return {...todo, completed : !todo.completed}"
       }
       // renvoyer nextState ou state si nextState est undefined :
       return nextState || state;

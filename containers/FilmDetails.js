@@ -46,7 +46,6 @@ const FilmDetails = ({ route, navigation, dispatch, favoriteFilms }) => {
     setIsLoading(false);
   }, []);
 
-  console.log(favoriteFilms);
   const displayLoading = () => {
     if (isLoading)
       return (

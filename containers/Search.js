@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 
-import FilmItem from "../components/FilmItem";
+import FilmList from "../components/FilmList";
 import { getFilmsFromApiWithSearchedText } from "../API/TMDBApi";
 
 // sous React les components qui affiche des éléments graphiques à l'écran se présentent sous la forme d'une classe
@@ -29,6 +29,8 @@ class Search extends React.Component {
       films: [],
       isLoading: false,
     };
+    //data-binding
+    this._loadFilms = this._loadFilms.bind(this);
   }
 
   /* GET DATA */
@@ -99,40 +101,15 @@ class Search extends React.Component {
           onSubmitEditing={() => this._searchFilms()}
         />
         <Button title="Rechercher" onPress={() => this._searchFilms()} />
-        <FlatList
-          data={this.state.films}
-          // rajoute une autre data pour prendre en compte les favoris ET la BDD movie, et surtout s'updater si l'une des data change, on aurait pu connecter le store redux favoris à FilmItem mais c'est pas optimisé ca appelle redux des milliers de fois à chaque FilmItem...
-          extraData={this.props.favoriteFilms}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <FilmItem
-              film={item}
-              isFavoriteFilm={
-                this.props.favoriteFilms.findIndex(
-                  (film) => film.id === item.id
-                ) !== -1
-                  ? true
-                  : false
-              }
-            />
-          )}
-          // On va définir  onEndReachedThreshold  à  0.5   pour que l'évènement  onReachEnd  se déclenche quand il ne reste plus qu'une moitié de longueur de notre FlatList à afficher:
-          onEndReachedThreshold={0.5}
-          // http://api.themoviedb.org/3/search/movie?api_key=VOTRE_TOKEN_ICI&language=fr&query=Star render :
-          // {
-          //   page: 1,
-          //   total_results: 1981,
-          //   total_pages: 100,
-          //   results: [
-          //       {...}
-          //   ]
-          // }
-          onEndReached={() => {
-            if (this.page < this.totalPages) {
-              this._loadFilms();
-            }
-          }}
+        <FilmList
+          films={this.state.films} // C'est bien le component Search qui récupère les films depuis l'API et on les transmet ici pour que le component FilmList les affiche
+          navigation={this.props.navigation} // Ici on transmet les informations de navigation pour permettre au component FilmList de naviguer vers le détail d'un film
+          loadFilms={this._loadFilms} // _loadFilm charge les films suivants, ça concerne l'API, le component FilmList va juste appeler cette méthode quand l'utilisateur aura parcouru tous les films et c'est le component Search qui lui fournira les films suivants
+          page={this.page}
+          totalPages={this.totalPages} // les infos page et totalPages vont être utile, côté component FilmList, pour ne pas déclencher l'évènement pour charger plus de film si on a atteint la dernière page
+          favoriteList={false} // Ici j'ai simplement ajouté un booléen à false pour indiquer qu'on n'est pas dans le cas de l'affichage de la liste des films favoris. Et ainsi pouvoir déclencher le chargement de plus de films lorsque l'utilisateur scrolle.
         />
+
         {/* fonction loading tout à la fin pour etre sur que tout s'est affiché : */}
         {this._displayLoading()}
       </View>
@@ -164,10 +141,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => {
-  return {
-    favoriteFilms: state.favoriteFilms,
-  };
-};
-
-export default connect(mapStateToProps)(Search);
+export default Search;
