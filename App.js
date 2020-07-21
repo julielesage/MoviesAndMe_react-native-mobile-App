@@ -28,8 +28,12 @@ export default class App extends React.Component {
           <Stack.Navigator>
             {/* Les screens retournent toujours des fonctions qui retourne un react-element ! */}
             <Stack.Screen
-              name="Tab"
-              options={{ header: () => null, animationEnabled: false }}
+              name="Search"
+              options={{
+                title: "",
+                animationEnabled: true,
+                headerTintColor: "black",
+              }}
             >
               {() => (
                 <Tab.Navigator
@@ -50,10 +54,24 @@ export default class App extends React.Component {
                   >
                     {() => (
                       <Stack.Navigator>
-                        <Stack.Screen name="Search">
+                        <Stack.Screen
+                          name="Search"
+                          options={{
+                            title: "s",
+                            animationEnabled: true,
+                          }}
+                        >
                           {() => <Search />}
                         </Stack.Screen>
-                        <Stack.Screen name="Film Details">
+                        <Stack.Screen
+                          name="Film Details"
+                          options={{
+                            title: "",
+                            animationEnabled: true,
+                            headerTintColor: "black",
+                            headerBackTitleVisible: true,
+                          }}
+                        >
                           {(props) => <FilmDetails {...props} />}
                         </Stack.Screen>
                       </Stack.Navigator>

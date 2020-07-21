@@ -5,8 +5,6 @@ import { connect } from "react-redux";
 
 class Favorites extends React.Component {
   render() {
-    console.log(this.props.favoriteFilms);
-    console.log("done");
     return (
       <View style={{ flex: 1, marginTop: 20 }}>
         <FilmList
