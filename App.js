@@ -3,6 +3,7 @@
 // npm install -g react-devtools
 import "react-native-gesture-handler";
 import React from "react";
+import { Image } from 'react-native';
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -12,6 +13,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import Search from "./containers/Search";
 import FilmDetails from "./containers/FilmDetails";
 import Favorites from "./containers/Favorites";
+import News from "./containers/News";
 
 // Pour utiliser Redux :
 // npm install --save redux
@@ -21,6 +23,7 @@ import { Provider } from "react-redux";
 import store from "./redux/store/configureStore";
 import { persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/es/integration/react';
+import { startClock } from "react-native-reanimated";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -97,6 +100,21 @@ export default class App extends React.Component {
                         <Stack.Navigator>
                           <Stack.Screen name="Favorites">
                             {() => <Favorites />}
+                          </Stack.Screen>
+                        </Stack.Navigator>
+                      )}
+                    </Tab.Screen>
+
+                    <Tab.Screen name="news"
+                      options={{
+                        tabBarIcon: () => {
+                          return <Image source={require("./assets/ic-fiber-new.png")} styles={{ width: "50", height: "20" }} />
+                        }
+                      }}>
+                      {() => (
+                        <Stack.Navigator>
+                          <Stack.Screen name="News">
+                            {() => <News />}
                           </Stack.Screen>
                         </Stack.Navigator>
                       )}
