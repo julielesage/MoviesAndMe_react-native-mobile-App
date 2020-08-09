@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   // pas besoin de retourner tout le store/state :
   return {
-    favoriteFilms: state.favoriteFilms,
+    favoriteFilms: state.toggleFavorite.favoriteFilms,
   };
 };
 

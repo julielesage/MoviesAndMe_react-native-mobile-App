@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return {
-    favoriteFilms: state.favoriteFilms,
+    favoriteFilms: state.toggleFavorite.favoriteFilms,
   };
 };
 

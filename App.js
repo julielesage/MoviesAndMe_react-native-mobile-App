@@ -1,3 +1,6 @@
+// pour lancer l'appli react-native :
+// react-native run-ios (plus long qu'avec expo)
+// npm install -g react-devtools
 import "react-native-gesture-handler";
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";

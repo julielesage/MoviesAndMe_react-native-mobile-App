@@ -8,7 +8,6 @@ const EnlargeShrink = (props) => {
   };
 
   const viewSize = new Animated.Value(_getSize());
-  console.log(viewSize, props.shouldEnlarge);
 
   Animated.spring(viewSize, {
     toValue: _getSize(),
